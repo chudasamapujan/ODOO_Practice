@@ -49,41 +49,75 @@
       75% { transform: translate(12px, 18px) scale(1.01); }
     }
 
-    /* Page transition overlay */
+    /* Page transition overlay with modern effects */
     .overlay {
       transform: scaleX(0);
       transform-origin: right center;
-      transition: transform 480ms ease;
+      transition: transform 600ms cubic-bezier(0.4, 0.0, 0.2, 1);
+      background: linear-gradient(-45deg, var(--cta), var(--cta-hover), var(--hover-forest));
+      background-size: 200% 200%;
+      animation: gradientFlow 1.2s ease-in-out;
     }
     .overlay.active {
       transform: scaleX(1);
     }
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-    /* Entry animations */
+    /* Modern entry animations with morphing */
     .slide-in-right {
-      animation: slideInRight .6s cubic-bezier(.2,.6,.2,1) both;
+      animation: modernSlideInRight .8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
     }
     .slide-out-left {
-      animation: slideOutLeft .4s ease both;
+      animation: modernSlideOutLeft .6s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
     }
-    @keyframes slideInRight {
-      from { opacity: 0; transform: translateX(40px); }
-      to { opacity: 1; transform: translateX(0); }
+    @keyframes modernSlideInRight {
+      0% { 
+        opacity: 0; 
+        transform: translateX(60px) scale(0.9) rotateY(10deg);
+        filter: blur(4px);
+      }
+      60% {
+        opacity: 0.8;
+        transform: translateX(10px) scale(1.02) rotateY(2deg);
+        filter: blur(1px);
+      }
+      100% { 
+        opacity: 1; 
+        transform: translateX(0) scale(1) rotateY(0deg);
+        filter: blur(0px);
+      }
     }
-    @keyframes slideOutLeft {
-      from { opacity: 1; transform: translateX(0); }
-      to { opacity: 0; transform: translateX(-40px); }
+    @keyframes modernSlideOutLeft {
+      0% { 
+        opacity: 1; 
+        transform: translateX(0) scale(1) rotateY(0deg);
+        filter: blur(0px);
+      }
+      40% {
+        opacity: 0.6;
+        transform: translateX(-20px) scale(0.98) rotateY(-5deg);
+        filter: blur(1px);
+      }
+      100% { 
+        opacity: 0; 
+        transform: translateX(-60px) scale(0.85) rotateY(-15deg);
+        filter: blur(6px);
+      }
     }
 
-    /* Field stagger animation */
+    /* Field stagger animation with bounce */
     .field-stagger {
       opacity: 0;
-      transform: translateY(12px);
-      transition: transform 400ms cubic-bezier(.2,.6,.2,1), opacity 400ms ease;
+      transform: translateY(20px) scale(0.95);
+      transition: transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 500ms ease;
     }
     .field-stagger.animate {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
 
     /* Error shake */
@@ -256,7 +290,7 @@
             overlay.classList.remove('active');
             sessionStorage.removeItem('navFrom');
             startFormAnimations();
-          }, 420);
+          }, 650);
         } else {
           startFormAnimations();
         }
@@ -265,17 +299,17 @@
       function startFormAnimations() {
         card.classList.add('slide-in-right');
         
-        // Stagger form field animations
+        // Enhanced stagger with bounce timing
         staggerElements.forEach((el, index) => {
           setTimeout(() => {
             el.classList.add('animate');
-          }, 300 + (index * 100));
+          }, 400 + (index * 120));
         });
 
         // Clean up slide animation class
         setTimeout(() => {
           card.classList.remove('slide-in-right');
-        }, 600);
+        }, 800);
       }
 
       // Password visibility toggle
@@ -342,7 +376,7 @@
         alert('Logged in successfully! (Demo)');
       });
 
-      // Navigation to signup page
+      // Navigation to signup page with enhanced animation
       toSignup.addEventListener('click', (e) => {
         e.preventDefault();
         
@@ -353,7 +387,7 @@
         
         setTimeout(() => {
           window.location.href = 'new_wealth_signup.html?from=login';
-        }, 280);
+        }, 380);
       });
 
       // Initialize animations on load
