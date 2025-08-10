@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wealth • Sign up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="color-scheme" content="light only" />
+  <style>
+    :root {
+      --bg-neutral: #EBEEF0;
+      --text-deep: #02170B;
+      --pale-card: #ABC5BB;
+      --hover-forest: #1F5A1C;
+      --text-secondary: #466357;
+      --cta: #4DBC41;
+      --cta-hover: #359425;
+      --cool-contrast: #546F9A;
+      --error: #DC2626;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+    }
+
+    /* Luxury animated background */
+    .bg-lux-animated {
+      background: linear-gradient(120deg, var(--bg-neutral), var(--pale-card), var(--bg-neutral));
+      background-size: 200% 200%;
+      animation: luxGradient 20s ease-in-out infinite;
+    }
+    @keyframes luxGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating background elements */
+    .blob {
+      filter: blur(22px);
+      opacity: .28;
+      animation: float 30s ease-in-out infinite;
+      will-change: transform;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(18px, -22px) scale(1.03); }
+      50% { transform: translate(-20px, 14px) scale(.97); }
+      75% { transform: translate(12px, 18px) scale(1.01); }
+    }
+
+    /* Page transition overlay */
+    .overlay {
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 480ms ease;
+    }
+    .overlay.active {
+      transform: scaleX(1);
+    }
+
+    /* Entry animations */
+    .slide-in-left {
+      animation: slideInLeft .6s cubic-bezier(.2,.6,.2,1) both;
+    }
+    .slide-out-right {
+      animation: slideOutRight .4s ease both;
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes slideOutRight {
+      from { opacity: 1; transform: translateX(0); }
+      to { opacity: 0; transform: translateX(40px); }
+    }
+
+    /* Field stagger animation */
+    .field-stagger {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: transform 400ms cubic-bezier(.2,.6,.2,1), opacity 400ms ease;
+    }
+    .field-stagger.animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Error shake */
+    .shake {
+      animation: shake .35s ease both;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    /* Floating labels */
+    .field {
+      position: relative;
+    }
+    .field input {
+      padding-top: 1.25rem;
+    }
+    .field label {
+      position: absolute;
+      left: 0.875rem;
+      top: 0.9rem;
+      pointer-events: none;
+      color: var(--text-secondary);
+      transition: transform .2s ease, color .2s ease, top .2s ease;
+      transform-origin: left top;
+    }
+    .field input:focus ~ label,
+    .field input:not(:placeholder-shown) ~ label {
+      top: 0.35rem;
+      color: var(--hover-forest);
+      transform: translateY(-2px) scale(.85);
+    }
+
+    /* Password eye animation */
+    .eye svg {
+      transition: transform 200ms ease;
+    }
+
+    /* Focus ring for accessibility */
+    .focus-ring:focus {
+      outline: 3px solid rgba(77, 188, 65, .6);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-lux-animated text-[var(--text-deep)]">
+  <!-- Background decorative elements -->
+  <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10">
+    <div class="blob absolute -top-24 -left-20 w-96 h-96 rounded-full" 
+         style="background: radial-gradient(circle at 30% 30%, rgba(84,111,154,0.25), transparent 60%);"></div>
+    <div class="blob absolute bottom-0 right-0 w-[30rem] h-[30rem] rounded-full" 
+         style="background: radial-gradient(circle at 50% 50%, rgba(171,197,187,0.25), transparent 60%);"></div>
+    <div class="blob absolute top-1/2 left-1/2 w-80 h-80 rounded-full transform -translate-x-1/2 -translate-y-1/2" 
+         style="background: radial-gradient(circle at 40% 60%, rgba(77,188,65,0.15), transparent 70%);"></div>
+  </div>
+
+  <!-- Page transition overlay -->
+  <div id="overlay" class="fixed inset-0 z-20 overlay" style="background: var(--cta);"></div>
+
+  <!-- Main container - proper grid layout -->
+  <main class="relative z-10 min-h-screen grid grid-cols-1 lg:grid-cols-2">
+    <!-- Form section -->
+    <section class="flex items-center justify-center p-6 sm:p-8 lg:p-12">
+      <div id="card" class="w-full max-w-md rounded-3xl bg-white/70 backdrop-blur-md shadow-xl ring-1 ring-white/50 p-8">
+        <!-- Signup Form -->
+        <form id="signupForm" role="form" aria-labelledby="su_title" class="space-y-6" autocomplete="on">
+          <!-- Header -->
+          <header class="space-y-2 mb-8">
+            <h1 id="su_title" class="text-3xl font-extrabold tracking-tight text-[var(--text-deep)]">
+              Create your account
+            </h1>
+            <p class="text-sm text-[var(--text-secondary)]">
+              Begin your journey to enduring wealth.
+            </p>
+          </header>
+
+          <!-- Form fields with stagger animation -->
+          <div class="space-y-5">
+            <div class="field field-stagger">
+              <input id="su_email" name="email" type="email" inputmode="email" required placeholder=" " autocomplete="email"
+                     class="w-full rounded-xl border border-[rgba(171,197,187,.6)] bg-white/70 px-4 py-4 text-[var(--text-deep)] placeholder-transparent shadow-sm transition focus:border-[var(--cta)] focus:ring-2 focus:ring-[rgba(77,188,65,.35)] focus:outline-none" 
+                     aria-required="true" aria-label="Email address" />
+              <label for="su_email">Email address</label>
+            </div>
+
+            <div class="field field-stagger">
+              <div class="relative">
+                <input id="su_password" name="password" type="password" required placeholder=" " autocomplete="new-password"
+                       class="w-full rounded-xl border border-[rgba(171,197,187,.6)] bg-white/70 px-4 py-4 pr-12 text-[var(--text-deep)] placeholder-transparent shadow-sm transition focus:border-[var(--cta)] focus:ring-2 focus:ring-[rgba(77,188,65,.35)] focus:outline-none" 
+                       aria-required="true" aria-label="Password" />
+                <button type="button" class="eye absolute inset-y-0 right-0 my-auto mr-3 grid place-items-center rounded-lg p-2 text-[var(--text-secondary)] hover:text-[var(--hover-forest)] focus-ring focus:outline-none transition-colors" 
+                        aria-label="Toggle password visibility" aria-pressed="false" data-target="su_password">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+                <label for="su_password" class="absolute left-4 top-4 text-[var(--text-secondary)]">Password</label>
+              </div>
+            </div>
+
+            <div class="field field-stagger">
+              <div class="relative">
+                <input id="su_confirm" name="confirm" type="password" required placeholder=" " autocomplete="new-password"
+                       class="w-full rounded-xl border border-[rgba(171,197,187,.6)] bg-white/70 px-4 py-4 pr-12 text-[var(--text-deep)] placeholder-transparent shadow-sm transition focus:border-[var(--cta)] focus:ring-2 focus:ring-[rgba(77,188,65,.35)] focus:outline-none" 
+                       aria-required="true" aria-label="Confirm password" />
+                <button type="button" class="eye absolute inset-y-0 right-0 my-auto mr-3 grid place-items-center rounded-lg p-2 text-[var(--text-secondary)] hover:text-[var(--hover-forest)] focus-ring focus:outline-none transition-colors" 
+                        aria-label="Toggle confirm password visibility" aria-pressed="false" data-target="su_confirm">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+                <label for="su_confirm" class="absolute left-4 top-4 text-[var(--text-secondary)]">Confirm password</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit button -->
+          <div class="field-stagger">
+            <button type="submit" 
+                    class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--cta)] px-6 py-4 font-semibold text-white shadow-lg shadow-green-600/20 ring-1 ring-emerald-600/40 transition-all duration-200 hover:scale-[1.02] hover:bg-[var(--cta-hover)] hover:shadow-xl focus-ring focus:outline-none" 
+                    aria-label="Create account">
+              <span>Create account</span>
+            </button>
+          </div>
+
+          <!-- Navigation link -->
+          <div class="field-stagger">
+            <p class="text-center text-sm text-[var(--text-secondary)]">
+              Already have an account?
+              <a id="toLogin" href="#" 
+                 class="font-semibold text-[var(--cta)] hover:text-[var(--cta-hover)] hover:underline focus-ring focus:outline-none transition-colors ml-1">
+                Log in
+              </a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Right side decorative content -->
+    <aside class="hidden lg:flex items-center justify-center p-12 bg-gradient-to-br from-white/10 to-transparent">
+      <div class="max-w-lg text-center">
+        <div class="mb-8 inline-flex items-center gap-2 rounded-full bg-white/40 px-4 py-2 text-sm tracking-wide text-[var(--text-secondary)] ring-1 ring-white/50 backdrop-blur">
+          Trusted • Discreet • Enduring
+        </div>
+        <h2 class="text-5xl leading-tight font-extrabold text-[var(--text-deep)] mb-6">
+          Private Wealth.<br/>Trusted Growth.
+        </h2>
+        <p class="text-lg text-[var(--text-secondary)] leading-relaxed">
+          A refined platform for modern portfolio stewardship and long-term prosperity. Join the exclusive community of discerning investors.
+        </p>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    (function(){
+      const card = document.getElementById('card');
+      const toLogin = document.getElementById('toLogin');
+      const overlay = document.getElementById('overlay');
+      const staggerElements = document.querySelectorAll('.field-stagger');
+
+      // Initial slide-in from left animation
+      function initializeAnimations() {
+        card.classList.add('slide-in-left');
+        
+        // Stagger form field animations
+        staggerElements.forEach((el, index) => {
+          setTimeout(() => {
+            el.classList.add('animate');
+          }, 300 + (index * 100));
+        });
+
+        // Clean up slide animation class
+        setTimeout(() => {
+          card.classList.remove('slide-in-left');
+        }, 600);
+      }
+
+      // Password visibility toggles
+      document.querySelectorAll('.eye').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.getAttribute('data-target');
+          const input = document.getElementById(targetId);
+          const isPasswordVisible = input.type === 'text';
+          
+          input.type = isPasswordVisible ? 'password' : 'text';
+          btn.setAttribute('aria-pressed', String(!isPasswordVisible));
+          
+          // Eye icon rotation animation
+          const icon = btn.querySelector('svg');
+          icon.style.transform = !isPasswordVisible ? 'rotate(15deg)' : 'rotate(0deg)';
+          setTimeout(() => {
+            icon.style.transform = 'rotate(0deg)';
+          }, 200);
+        });
+      });
+
+      // Form validation and submission
+      document.getElementById('signupForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('su_email');
+        const password = document.getElementById('su_password');
+        const confirm = document.getElementById('su_confirm');
+        
+        let isValid = true;
+        
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email.value.trim())) {
+          isValid = false;
+          email.style.borderColor = 'var(--error)';
+          email.style.boxShadow = '0 0 0 4px rgba(220, 38, 38, 0.15)';
+        }
+        
+        // Password validation
+        if (password.value.length < 6) {
+          isValid = false;
+          password.style.borderColor = 'var(--error)';
+          password.style.boxShadow = '0 0 0 4px rgba(220, 38, 38, 0.15)';
+        }
+        
+        // Confirm password validation
+        if (password.value !== confirm.value) {
+          isValid = false;
+          confirm.style.borderColor = 'var(--error)';
+          confirm.style.boxShadow = '0 0 0 4px rgba(220, 38, 38, 0.15)';
+        }
+        
+        if (!isValid) {
+          // Shake animation for errors
+          card.classList.remove('shake');
+          void card.offsetWidth; // Force reflow
+          card.classList.add('shake');
+          
+          // Reset error styles after animation
+          setTimeout(() => {
+            [email, password, confirm].forEach(input => {
+              input.style.borderColor = '';
+              input.style.boxShadow = '';
+            });
+          }, 2000);
+          
+          return;
+        }
+        
+        // Success animation - slide out to right and navigate
+        overlay.style.transformOrigin = 'right center';
+        overlay.classList.add('active');
+        card.classList.add('slide-out-right');
+        sessionStorage.setItem('navFrom', 'signup');
+        
+        setTimeout(() => {
+          window.location.href = 'wealth_login.html?from=signup';
+        }, 320);
+      });
+
+      // Navigation to login page
+      toLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        overlay.style.transformOrigin = 'right center';
+        overlay.classList.add('active');
+        card.classList.add('slide-out-right');
+        sessionStorage.setItem('navFrom', 'signup');
+        
+        setTimeout(() => {
+          window.location.href = 'wealth_login.html?from=signup';
+        }, 280);
+      });
+
+      // Initialize animations on load
+      initializeAnimations();
+    })();
+  </script>
+</body>
+</html>
