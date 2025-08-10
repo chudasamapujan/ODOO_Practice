@@ -350,9 +350,15 @@
                        aria-required="true" aria-label="Password" />
                 <button type="button" class="eye absolute inset-y-0 right-0 my-auto mr-3 grid place-items-center rounded-lg p-2 text-[var(--text-secondary)] hover:text-[var(--hover-forest)] focus-ring focus:outline-none transition-colors" 
                         aria-label="Toggle password visibility" aria-pressed="false" data-target="su_password">
-                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <svg class="h-5 w-5 eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg class="h-5 w-5 eye-closed hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 11 8 11 8a13.16 13.16 0 0 1-1.67 2.68"></path>
+                    <path d="M6.61 6.61A13.526 13.526 0 0 0 1 12s4 8 11 8a9.74 9.74 0 0 0 5.39-1.61"></path>
+                    <line x1="2" y1="2" x2="22" y2="22"></line>
                   </svg>
                 </button>
                 <label for="su_password" class="absolute left-4 top-4 text-[var(--text-secondary)]">Password</label>
@@ -366,9 +372,15 @@
                        aria-required="true" aria-label="Confirm password" />
                 <button type="button" class="eye absolute inset-y-0 right-0 my-auto mr-3 grid place-items-center rounded-lg p-2 text-[var(--text-secondary)] hover:text-[var(--hover-forest)] focus-ring focus:outline-none transition-colors" 
                         aria-label="Toggle confirm password visibility" aria-pressed="false" data-target="su_confirm">
-                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <svg class="h-5 w-5 eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg class="h-5 w-5 eye-closed hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 11 8 11 8a13.16 13.16 0 0 1-1.67 2.68"></path>
+                    <path d="M6.61 6.61A13.526 13.526 0 0 0 1 12s4 8 11 8a9.74 9.74 0 0 0 5.39-1.61"></path>
+                    <line x1="2" y1="2" x2="22" y2="22"></line>
                   </svg>
                 </button>
                 <label for="su_confirm" class="absolute left-4 top-4 text-[var(--text-secondary)]">Confirm password</label>
@@ -533,15 +545,28 @@
           const targetId = btn.getAttribute('data-target');
           const input = document.getElementById(targetId);
           const isPasswordVisible = input.type === 'text';
+          const eyeOpen = btn.querySelector('.eye-open');
+          const eyeClosed = btn.querySelector('.eye-closed');
           
+          // Toggle input type
           input.type = isPasswordVisible ? 'password' : 'text';
           btn.setAttribute('aria-pressed', String(!isPasswordVisible));
           
-          // Eye icon rotation animation
-          const icon = btn.querySelector('svg');
-          icon.style.transform = !isPasswordVisible ? 'rotate(15deg)' : 'rotate(0deg)';
+          // Toggle icons
+          if (isPasswordVisible) {
+            // Password will be hidden - show eye-open icon
+            eyeOpen.classList.remove('hidden');
+            eyeClosed.classList.add('hidden');
+          } else {
+            // Password will be visible - show eye-closed icon
+            eyeOpen.classList.add('hidden');
+            eyeClosed.classList.remove('hidden');
+          }
+          
+          // Subtle rotation animation
+          btn.style.transform = !isPasswordVisible ? 'rotate(15deg)' : 'rotate(0deg)';
           setTimeout(() => {
-            icon.style.transform = 'rotate(0deg)';
+            btn.style.transform = 'rotate(0deg)';
           }, 200);
         });
       });
